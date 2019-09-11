@@ -8,20 +8,16 @@
         <a class="link" href="/">Home</a>
         <a class="link" href="newTask">Add New Task</a>
         <a class="link" href="listTasks">List Tasks</a>
-        <a class="link" href="deleteCompleted">Delete All Completed</a>
         <a class="link" href="updateStatus">Update Task Status</a>
         <a class="link" href="newDeveloper">Add New Developer</a>
         <a class="link" href="listDevelopers">List All Developers</a><br><br>
-    
-        <form action="/deleteTask" method="POST">
-            <span>Task ID</span>
-            <select name="_id" id="">
-                <% for (var i = 0; i < db.length; i++) { %>
-                    <option value=<%= db[i]._id %>><%= db[i]._id %></option>
-                <% }%>
-            </select><br>
-            <input type = "submit" value="Submit" />
-        
-        </form>
     </h1>
+
+    <form action="/deleteCompleted" method="POST">
+        <span>Press the button to delete all completed tasks:</span><br><br>
+        <button>
+            Delete Complete Tasks
+        </button>
+
+    </form>
 </html>

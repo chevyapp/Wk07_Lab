@@ -13,12 +13,18 @@
             <a class="link" href="/">Home</a>
             <a class="link" href="newTask">Add New Task</a>
             <a class="link" href="listTasks">List Tasks</a>
-            <a class="link" href="deleteTask">Delete Tasks</a><br><br>
-            <a class="link" href="newDeveloper">Add New Developer</a><br><br>
+            <a class="link" href="deleteTask">Delete Tasks</a>
+            <a class="link" href="deleteCompleted">Delete All Completed</a>
+            <a class="link" href="newDeveloper">Add New Developer</a>
             <a class="link" href="listDevelopers">List All Developers</a><br><br>
         
             <form action="/updateStatus" method = "POST">
-                <span>Task ID</span><input type="text" name="_id"> <br>            
+                <span>Task ID</span>
+                <select name="_id" id="">
+                    <% for (var i = 0; i < db.length; i++) { %>
+                        <option value=<%= db[i]._id %>><%= db[i]._id %></option>
+                    <% }%>
+                </select><br>           
                 <span>Task Status</span>
                     <select name="taskStatus" id="">
                         <option value="inProgress">In Progress</option>

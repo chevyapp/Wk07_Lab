@@ -1,7 +1,5 @@
 let express = require('express');
 let bodyParser = require('body-parser');
-//Get a refernce to MongoDB module ref
-let mongodb = require('mongodb');
 let mongoose = require('mongoose');
 
 //Reference schemas
@@ -45,7 +43,9 @@ app.get('/', function (req, res) {
 
 //Insert new task page
 app.get('/newTask', function (req, res) {
-    res.render(path2public + 'newTask.html');
+    Developer.find({}, function (err, data) {
+        res.render(path2public + 'newTask.html', {db: data});
+    });
 })
 
 //Post request for new task page
@@ -76,12 +76,16 @@ app.get('/listTasks', function (req, res) {
 
 //Delete Task
 app.get('/deleteTask', function(req, res){
-    res.sendFile(path2public + 'deleteTask.html');
+    Tasks.find({}, function (err, data) {
+        res.render(path2public + 'deleteTask.html', {db: data});
+    });
 });
 
 app.post('/deleteTask', function(req, res){
     //ID is an object, hence must change to object - cannot use string directly
-    let query = { '_id': new mongodb.ObjectID(req.body._id)};
+    let query = { '_id': mongoose.Types.ObjectId(req.body._id)};
+    
+    console.log(req.body);
 
     Tasks.deleteOne(query, function (err, doc){
         console.log(doc);
@@ -90,23 +94,29 @@ app.post('/deleteTask', function(req, res){
     res.redirect('listTasks');
 });
 
-//Delete Completed Tasks
+//Delete all completed tasks
 app.get('/deleteCompleted', function(req, res){
+    res.sendFile(path2public + 'deleteCompleted.html');
+});
+
+//Post request for Delete all completed
+app.post('/deleteCompleted', function(req, res){
     let query = {taskStatus: 'complete'};
-    Tasks.deleteMany(query, function (err, doc){
-        console.log(doc);
+    Tasks.deleteMany(query, function () {
+        res.redirect('listTasks')
     });
-    res.redirect('listTasks');
 });
 
 //Update Task Status
 app.get('/updateStatus', function(req, res){
-    res.sendFile(path2public + 'updateStatus.html');
+    Tasks.find({}, function (err, data) {
+        res.render(path2public + 'updateStatus.html', {db: data});
+    });
 });
 
 //Post method for update task status
 app.post('/updateStatus', function(req, res){
-    let query = { _id: new mongodb.ObjectID(req.body._id)};    
+    let query = { '_id': mongoose.Types.ObjectId(req.body._id)};
     let status = { taskStatus: req.body.taskStatus};
     Tasks.updateOne(query, {$set: status}, function(err, doc){
         console.log(doc);
