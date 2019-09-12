@@ -163,6 +163,15 @@ app.get('/listDevelopers', function (req, res) {
 
 })
 
+//ADDITIONAL TASK
+app.get('/changeName/:oldFirstName/:newFirstName/', function (req, res){
+    let query = {'name.firstName': req.params.oldFirstName}
+    Developer.updateMany(query, {$set: {'name.firstName': req.params.newFirstName}}, function(err, doc){
+        console.log(doc);
+        res.redirect('/listDevelopers');  
+    });
+});
+
 app.listen(8080, () => {
     console.log('server started...');
-})
+});
